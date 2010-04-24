@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ruby-alsa}
-  s.version = "0.0.1"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Alban Peignier"]
@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email = ["alban@tryphon.eu"]
   s.extra_rdoc_files = ["History.txt", "Manifest.txt"]
   s.files = ["Gemfile", "History.txt", "Manifest.txt", "README.rdoc", "Rakefile", "lib/alsa.rb", "script/console", "script/destroy", "script/generate", "spec/alsa/pcm_spec.rb", "spec/spec.opts", "spec/spec_helper.rb", "tasks/rspec.rake"]
-  s.homepage = %q{http://github.com/#{github_username}/#{project_name}}
+  s.homepage = %q{http://projects.tryphon.eu/ruby-alsa}
   s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{ruby-alsa}

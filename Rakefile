@@ -14,7 +14,7 @@ $hoe = Hoe.spec 'ruby-alsa' do
   self.developer 'Alban Peignier', 'alban@tryphon.eu'
   self.rubyforge_name       = self.name # TODO this is default value
   self.extra_deps         = [['ffi','>= 0.6.3']]
-  self.url = 'http://projects.tryphon.eu/ruby-backup'
+  self.url = 'http://projects.tryphon.eu/ruby-alsa'
 end
 
 require 'newgem/tasks'
