@@ -1,0 +1,1 @@
+task :buildbot => ["spec"]
