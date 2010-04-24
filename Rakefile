@@ -4,6 +4,12 @@ require 'hoe'
 require 'fileutils'
 require 'lib/alsa.rb'
 
+rubyforge_user_config = File.expand_path("~/.rubyforge/user-config.yml")
+unless File.exists?(rubyforge_user_config)
+  mkdir_p File.dirname(rubyforge_user_config)
+  touch rubyforge_user_config
+end
+
 Hoe.plugin :newgem
 # Hoe.plugin :website
 # Hoe.plugin :cucumberfeatures
