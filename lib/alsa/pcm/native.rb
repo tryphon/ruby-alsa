@@ -2,7 +2,7 @@ module ALSA::PCM
 
   module Native
     extend FFI::Library
-    ffi_lib "asound"
+    ffi_lib "libasound.so.2"
 
     STREAM_CAPTURE = 1
     BLOCK = 0
