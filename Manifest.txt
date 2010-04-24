@@ -1,0 +1,13 @@
+Gemfile
+History.txt
+Manifest.txt
+README.rdoc
+Rakefile
+lib/alsa.rb
+script/console
+script/destroy
+script/generate
+spec/alsa/pcm_spec.rb
+spec/spec.opts
+spec/spec_helper.rb
+tasks/rspec.rake
