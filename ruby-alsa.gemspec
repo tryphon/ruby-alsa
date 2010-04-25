@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ruby-alsa}
-  s.version = "0.0.3"
+  s.version = "0.0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Alban Peignier"]
-  s.date = %q{2010-04-24}
+  s.date = %q{2010-04-25}
   s.description = %q{FIX (describe your package)}
   s.email = ["alban@tryphon.eu"]
   s.extra_rdoc_files = ["History.txt", "Manifest.txt"]
