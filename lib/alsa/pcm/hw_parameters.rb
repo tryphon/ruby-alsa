@@ -110,6 +110,10 @@ module ALSA::PCM
       ALSA::PCM::Native::format_size(self.sample_format, frame_count) * self.channels
     end
 
+    def frame_count_for(byte_count)
+      ALSA::PCM::Native::bytes_to_frames(self.device.handle, byte_count)
+    end
+
     def free
       ALSA::try_to "unallocate hw_params" do
         ALSA::PCM::Native::hw_params_free self.handle

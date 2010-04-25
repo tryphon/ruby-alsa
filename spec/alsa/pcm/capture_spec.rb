@@ -69,7 +69,7 @@ describe ALSA::PCM::Capture do
 
     let(:capture) { ALSA::PCM::Capture.new }
     
-    it "should raise an error when cature isn't opened" do
+    it "should raise an error when capture isn't opened" do
       lambda { capture.read }.should raise_error
     end
 

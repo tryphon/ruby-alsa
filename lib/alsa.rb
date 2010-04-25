@@ -14,7 +14,9 @@ require 'alsa/logger'
 require 'alsa/native'
 require 'alsa/pcm/native'
 require 'alsa/pcm/hw_parameters'
+require 'alsa/pcm/stream'
 require 'alsa/pcm/capture'
+require 'alsa/pcm/playback'
 
 module ALSA
 

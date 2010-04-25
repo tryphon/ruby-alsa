@@ -1,54 +1,8 @@
 module ALSA::PCM
-  class Capture
+  class Capture < Stream
 
-    attr_accessor :handle
-
-    def self.open(device, hardware_attributes = {}, &block)
-      Capture.new.open(device, hardware_attributes, &block)
-    end
-
-    def open(device, hardware_attributes = {}, &block)
-      capture_handle = FFI::MemoryPointer.new :pointer
-      ALSA::try_to "open audio device #{device}" do
-        ALSA::PCM::Native::open capture_handle, device, ALSA::PCM::Native::STREAM_CAPTURE, ALSA::PCM::Native::BLOCK
-      end
-      self.handle = capture_handle.read_pointer
-
-      self.hardware_parameters = hardware_attributes
-
-      if block_given?
-        begin
-          yield self 
-        ensure
-          self.close
-        end
-      end
-    end
-
-    def change_hardware_parameters
-      hw_params = ALSA::PCM::HwParameters.new(self).default_for_device
-
-      begin
-        yield hw_params
-
-        ALSA::try_to "set hw parameters" do
-          ALSA::PCM::Native::hw_params self.handle, hw_params.handle
-        end
-      ensure
-        hw_params.free
-      end
-    end
-
-    def hardware_parameters
-      ALSA::PCM::HwParameters.new(self).current_for_device
-    end
-    alias_method :hw_params, :hardware_parameters
-
-    def hardware_parameters=(attributes= {})
-      attributes = {:access => :rw_interleaved, :channels => 2, :sample_format => :s16_le }.update(attributes)
-      change_hardware_parameters do |hw_params|
-        hw_params.update_attributes(attributes)
-      end
+    def native_constant
+      ALSA::PCM::Native::STREAM_CAPTURE
     end
 
     def read
@@ -87,22 +41,6 @@ module ALSA::PCM
         read_buffer(buffer + read_buffer_size, missing_frame_count)
       end
     end
-
-    def opened?
-      not self.handle.nil?
-    end
-
-    def check_handle!
-      raise "Capture isn't opened" unless opened?
-    end
-
-    def close
-      ALSA::try_to "close audio device" do
-        ALSA::PCM::Native::close self.handle
-        self.handle = nil
-      end
-    end
-
 
   end
 end
