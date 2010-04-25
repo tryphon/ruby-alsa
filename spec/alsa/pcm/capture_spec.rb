@@ -4,6 +4,10 @@ describe ALSA::PCM::Capture do
 
   let(:device) { "default" }
 
+  def pending_if_no_device
+    pending("requires a real alsa device") unless File.exists?("/proc/asound")
+  end
+
   describe ".open" do
 
     let(:capture) { stub :open => true }
@@ -34,6 +38,8 @@ describe ALSA::PCM::Capture do
     end
 
     it "should initialize the native handle" do
+      pending_if_no_device
+
       capture.open(device)
       capture.handle.should_not be_nil
     end
@@ -41,12 +47,16 @@ describe ALSA::PCM::Capture do
     context "when a block is given" do
 
       it "should yield the block with itself" do
+        pending_if_no_device
+
         capture.open(device) do |given_capture|
           given_capture.should == capture
         end
       end
 
       it "should close the capture after block" do
+        pending_if_no_device
+
         capture.open(device) {}
         capture.should_not be_opened
       end
@@ -64,6 +74,8 @@ describe ALSA::PCM::Capture do
     end
 
     it "should yield with read samples (buffer and frame count)" do
+      pending_if_no_device
+
       capture.open(device) do |capture|
         capture.read do |buffer, frame_count|
           buffer.size.should == capture.hw_params.buffer_size_for(frame_count)
@@ -73,6 +85,8 @@ describe ALSA::PCM::Capture do
     end
 
     it "should stop reading when block returns false" do
+      pending_if_no_device
+
       read_count = 0
       capture.open(device) do |capture|
         capture.read do |buffer, frame_count|
