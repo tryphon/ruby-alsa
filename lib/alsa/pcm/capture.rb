@@ -14,7 +14,7 @@ module ALSA::PCM
       end
       self.handle = capture_handle.read_pointer
 
-      self.hardware_parameters=hardware_attributes
+      self.hardware_parameters = hardware_attributes
 
       if block_given?
         begin
@@ -26,7 +26,7 @@ module ALSA::PCM
     end
 
     def change_hardware_parameters
-      hw_params = HwParameters.new(self).default_for_device
+      hw_params = ALSA::PCM::HwParameters.new(self).default_for_device
 
       begin
         yield hw_params
@@ -40,18 +40,20 @@ module ALSA::PCM
     end
 
     def hardware_parameters
-      HwParameters.new(self).current_for_device
+      ALSA::PCM::HwParameters.new(self).current_for_device
     end
     alias_method :hw_params, :hardware_parameters
 
     def hardware_parameters=(attributes= {})
-      attributes = {:access => :rw_interleaved}.update(attributes)
+      attributes = {:access => :rw_interleaved, :channels => 2, :sample_format => :s16_le }.update(attributes)
       change_hardware_parameters do |hw_params|
         hw_params.update_attributes(attributes)
       end
     end
 
     def read
+      check_handle!
+
       ALSA.logger.debug { "start read with #{hw_params.sample_rate}, #{hw_params.channels} channels"}
 
       # use an 500ms buffer
@@ -65,6 +67,8 @@ module ALSA::PCM
     end
 
     def read_buffer(buffer, frame_count)
+      check_handle!
+
       read_count = ALSA::try_to "read from audio interface" do
         response = ALSA::PCM::Native::readi(self.handle, buffer, frame_count)
         if ALSA::Native::error_code?(response)
@@ -84,9 +88,18 @@ module ALSA::PCM
       end
     end
 
+    def opened?
+      not self.handle.nil?
+    end
+
+    def check_handle!
+      raise "Capture isn't opened" unless opened?
+    end
+
     def close
       ALSA::try_to "close audio device" do
         ALSA::PCM::Native::close self.handle
+        self.handle = nil
       end
     end
 

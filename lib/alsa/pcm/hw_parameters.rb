@@ -1,4 +1,4 @@
-module PCM
+module ALSA::PCM
   class HwParameters
 
     attr_accessor :handle, :device
