@@ -2,12 +2,22 @@ module ALSA::PCM
   class Stream
 
     attr_accessor :handle
+    attr_accessor :buffer_time_size
 
     def self.open(device = "default", hardware_attributes = {}, &block)
       new.open(device, hardware_attributes, &block)
     end
 
     def open(device = "default", hardware_attributes = {}, &block)
+      options = {}
+
+      if Hash === device
+        options = device
+        device = (options[:device] or "default")
+      end
+
+      self.buffer_time_size = options[:buffer_time_size] if options[:buffer_time_size]
+
       handle_pointer = FFI::MemoryPointer.new :pointer
       ALSA::try_to "open audio device #{device}" do
         ALSA::PCM::Native::open handle_pointer, device, native_constant, ALSA::PCM::Native::BLOCK
@@ -23,6 +33,14 @@ module ALSA::PCM
           self.close
         end
       end
+    end
+
+    def buffer_time_size
+      @buffer_time_size ||= 250
+    end
+
+    def buffer_frame_count
+      @buffer_frame_count ||= hw_params.sample_rate * buffer_time_size / 1000
     end
 
     def change_hardware_parameters

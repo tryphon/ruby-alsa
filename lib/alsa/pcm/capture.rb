@@ -10,13 +10,11 @@ module ALSA::PCM
 
       ALSA.logger.debug { "start read with #{hw_params.sample_rate}, #{hw_params.channels} channels"}
 
-      # use an 500ms buffer
-      frame_count = hw_params.sample_rate / 2
-      ALSA.logger.debug { "allocate #{hw_params.buffer_size_for(frame_count)} bytes for #{frame_count} frames" }
-      FFI::MemoryPointer.new(:char, hw_params.buffer_size_for(frame_count)) do |buffer|
+      ALSA.logger.debug { "allocate #{hw_params.buffer_size_for(buffer_frame_count)} bytes for #{buffer_frame_count} frames" }
+      FFI::MemoryPointer.new(:char, hw_params.buffer_size_for(buffer_frame_count)) do |buffer|
         begin
-          read_buffer buffer, frame_count
-        end while yield buffer, frame_count
+          read_buffer buffer, buffer_frame_count
+        end while yield buffer, buffer_frame_count
       end
     end
 
