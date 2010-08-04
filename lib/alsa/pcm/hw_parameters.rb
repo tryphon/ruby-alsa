@@ -59,10 +59,46 @@ module ALSA::PCM
       end
     end
 
+    def period_time=(period_time)
+      ALSA::try_to "set period time (#{period_time})" do
+        value = FFI::MemoryPointer.new(:int)
+        value.write_int(period_time)
+
+        dir = FFI::MemoryPointer.new(:int)
+        dir.write_int(-1)
+        error_code = ALSA::PCM::Native::hw_params_set_period_time_near self.device.handle, self.handle, value, dir
+
+        value.free
+        dir.free
+
+        error_code
+      end
+    end
+
+    def period_time
+      value = nil
+      ALSA::try_to "get period time" do
+        value_pointer = FFI::MemoryPointer.new(:int)
+        dir_pointer = FFI::MemoryPointer.new(:int)
+        dir_pointer.write_int(0)
+
+        error_code = ALSA::PCM::Native::hw_params_get_period_time self.handle, value_pointer, dir_pointer
+
+        value = value_pointer.read_int
+
+        value_pointer.free
+        dir_pointer.free
+
+        error_code
+      end
+      value
+    end
+
     def sample_rate
       rate = nil
       ALSA::try_to "get sample rate" do
         rate_pointer = FFI::MemoryPointer.new(:int)
+
         dir_pointer = FFI::MemoryPointer.new(:int)
         dir_pointer.write_int(0)
 

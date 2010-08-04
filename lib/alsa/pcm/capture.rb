@@ -8,7 +8,7 @@ module ALSA::PCM
     def read
       check_handle!
 
-      ALSA.logger.debug { "start read with #{hw_params.sample_rate}, #{hw_params.channels} channels"}
+      ALSA.logger.debug { "start read with #{hw_params.sample_rate}, #{hw_params.channels} channels, #{hw_params.period_time} as period time"}
 
       ALSA.logger.debug { "allocate #{hw_params.buffer_size_for(buffer_frame_count)} bytes for #{buffer_frame_count} frames" }
       FFI::MemoryPointer.new(:char, hw_params.buffer_size_for(buffer_frame_count)) do |buffer|
