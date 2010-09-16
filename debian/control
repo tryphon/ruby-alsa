@@ -1,0 +1,18 @@
+Source: libalsa-ruby
+Section: sound
+Priority: optional
+Maintainer: Alban Peignier <alban@tryphon.eu>
+Build-Depends: debhelper, cdbs, ruby-pkg-tools, libsetup-ruby1.8
+Build-Depends-Indep: ruby1.8
+Standards-Version: 3.8.1
+Homepage: http://projects.tryphon.eu/ruby-alsa
+
+Package: libalsa-ruby1.8
+Architecture: all
+Depends: ruby1.8, libruby1.8, libasound2, libffi-ruby
+Description: Ruby 1.8 binding for ALSA library.
+
+Package: libalsa-ruby
+Architecture: all
+Depends: libalsa-ruby1.8
+Description: Ruby binding for ALSA library.

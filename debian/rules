@@ -1,0 +1,15 @@
+#!/usr/bin/make -f
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/ruby-pkg-tools/1/class/ruby-setup-rb.mk
+
+install/libalsa-ruby::
+#	 cp $(DEB_SRCDIR)/debian/alsa-backup.conf debian/$(cdbs_curpkg)/etc/
+	echo DEB_RUBY_LIB_PACKAGES
+	echo $(DEB_RUBY_LIB_PACKAGES)
+	echo DEB_RUBY_REAL_LIB_PACKAGES
+	echo $(DEB_RUBY_REAL_LIB_PACKAGES)
+	echo DEB_RUBY_DUMMY_LIB_PACKAGES
+	echo $(DEB_RUBY_DUMMY_LIB_PACKAGES)
+	echo DEB_RUBY_LIB_DOC_PACKAGES
+	echo $(DEB_RUBY_LIB_DOC_PACKAGES)
