@@ -12,6 +12,9 @@ module ALSA::PCM
     attach_function :prepare, :snd_pcm_prepare, [ :pointer ], :int
     attach_function :close, :snd_pcm_close, [:pointer], :int
 
+    attach_function :wait, :snd_pcm_wait, [:pointer, :int], :int
+    attach_function :avail_update, :snd_pcm_avail_update, [:pointer], :int
+
     attach_function :readi, :snd_pcm_readi, [ :pointer, :pointer, :ulong ], :long
     attach_function :writei, :snd_pcm_writei, [ :pointer, :pointer, :ulong ], :long
 
@@ -47,6 +50,13 @@ module ALSA::PCM
     attach_function :hw_params_set_periods, :snd_pcm_hw_params_set_periods, [ :pointer, :pointer, :uint, :int ], :int
     attach_function :hw_params_set_period_time_near, :snd_pcm_hw_params_set_period_time_near, [ :pointer, :pointer, :pointer, :pointer ], :int
     attach_function :hw_params_get_period_time, :snd_pcm_hw_params_get_period_time, [ :pointer, :pointer, :pointer ], :int
+
+    attach_function :sw_params, :snd_pcm_sw_params, [:pointer, :pointer], :int
+    attach_function :sw_params_malloc, :snd_pcm_sw_params_malloc, [:pointer], :int
+    attach_function :sw_params_free, :snd_pcm_sw_params_free, [:pointer], :int
+    attach_function :sw_params_current, :snd_pcm_sw_params_current, [ :pointer, :pointer ], :int
+    attach_function :sw_params_set_avail_min, :snd_pcm_sw_params_set_avail_min, [ :pointer, :pointer, :uint ], :int
+    attach_function :sw_params_get_avail_min, :snd_pcm_sw_params_get_avail_min, [ :pointer, :pointer ], :int
 
     attach_function :format_size, :snd_pcm_format_size, [ :int, :uint ], :int
     attach_function :bytes_to_frames, :snd_pcm_bytes_to_frames, [ :pointer, :int ], :int
