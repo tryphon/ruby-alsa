@@ -26,6 +26,10 @@ module ALSA::PCM
 
       self.hardware_parameters = hardware_attributes
 
+      change_software_parameters do |sw_params|
+        sw_params.available_minimum = buffer_frame_count / 2
+      end
+
       if block_given?
         begin
           yield self 
@@ -75,6 +79,25 @@ module ALSA::PCM
       end
     end
 
+    def change_software_parameters
+      sw_params = software_parameters
+
+      begin
+        yield sw_params
+
+        ALSA::try_to "set sw parameters" do
+          ALSA::PCM::Native::sw_params self.handle, sw_params.handle
+        end
+      ensure
+        sw_params.free
+      end
+    end
+
+    def software_parameters
+      ALSA::PCM::SwParameters.new(self).current_for_device
+    end
+    alias_method :sw_params, :software_parameters
+
     def opened?
       not self.handle.nil?
     end
@@ -88,6 +111,19 @@ module ALSA::PCM
         ALSA::PCM::Native::close self.handle
         self.handle = nil
       end
+    end
+
+    def available_frame_count
+      check_handle!
+
+      ALSA::try_to "wait the interface is ready" do
+        ALSA::PCM::Native::wait(self.handle, buffer_time_size)
+      end
+      available_frame_count = ALSA::try_to "read available space" do
+        ALSA::PCM::Native::avail_update(self.handle)
+      end
+
+      [available_frame_count, buffer_frame_count].min
     end
 
   end

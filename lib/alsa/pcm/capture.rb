@@ -13,7 +13,7 @@ module ALSA::PCM
       ALSA.logger.debug { "allocate #{hw_params.buffer_size_for(buffer_frame_count)} bytes for #{buffer_frame_count} frames" }
       FFI::MemoryPointer.new(:char, hw_params.buffer_size_for(buffer_frame_count)) do |buffer|
         begin
-          read_buffer buffer, buffer_frame_count
+          read_buffer buffer, available_frame_count
         end while yield buffer, buffer_frame_count
       end
     end

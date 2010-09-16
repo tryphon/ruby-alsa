@@ -28,7 +28,7 @@ module ALSA::PCM
       check_handle!
 
       FFI::MemoryPointer.new(:char, hw_params.buffer_size_for(buffer_frame_count)) do |buffer|
-        while audio_content = yield(buffer.size)
+        while audio_content = yield(hw_params.buffer_size_for(available_frame_count))
           buffer.write_string audio_content
 
           read_frame_count = 
