@@ -4,8 +4,10 @@ module ALSA::PCM
     extend FFI::Library
     ffi_lib "libasound.so.2"
 
-    STREAM_PLAYBACK = 0
-    STREAM_CAPTURE = 1
+    module Stream
+      PLAYBACK = 0
+      CAPTURE = 1
+    end
 
     BLOCK = 0
     attach_function :open, :snd_pcm_open, [:pointer, :string, :int, :int], :int
@@ -60,5 +62,6 @@ module ALSA::PCM
 
     attach_function :format_size, :snd_pcm_format_size, [ :int, :uint ], :int
     attach_function :bytes_to_frames, :snd_pcm_bytes_to_frames, [ :pointer, :int ], :int
+
   end
 end

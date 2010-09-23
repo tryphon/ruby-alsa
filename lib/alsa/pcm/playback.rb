@@ -2,7 +2,7 @@ module ALSA::PCM
   class Playback < Stream
 
     def native_constant
-      ALSA::PCM::Native::STREAM_PLAYBACK
+      ALSA::PCM::Native::Stream::PLAYBACK
     end
 
     def write_buffer(buffer, frame_count)

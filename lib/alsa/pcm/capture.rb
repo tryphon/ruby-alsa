@@ -2,7 +2,7 @@ module ALSA::PCM
   class Capture < Stream
 
     def native_constant
-      ALSA::PCM::Native::STREAM_CAPTURE
+      ALSA::PCM::Native::Stream::CAPTURE
     end
 
     def read
