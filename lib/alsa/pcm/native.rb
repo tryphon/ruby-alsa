@@ -63,5 +63,7 @@ module ALSA::PCM
     attach_function :format_size, :snd_pcm_format_size, [ :int, :uint ], :int
     attach_function :bytes_to_frames, :snd_pcm_bytes_to_frames, [ :pointer, :int ], :int
 
+    attach_function :start, :snd_pcm_start, [ :pointer ], :int
+
   end
 end

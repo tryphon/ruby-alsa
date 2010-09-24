@@ -30,12 +30,16 @@ module ALSA::PCM
         sw_params.available_minimum = buffer_frame_count / 2
       end
 
+      ALSA::PCM::Native.prepare(handle)
+
       if block_given?
         begin
           yield self 
         ensure
           self.close
         end
+      else
+        self
       end
     end
 

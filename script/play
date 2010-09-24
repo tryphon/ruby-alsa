@@ -13,8 +13,15 @@ require "#{File.dirname(__FILE__)}/../lib/alsa"
 include ALSA::PCM
 ALSA.logger.level = Logger::DEBUG
 
-Playback.open do |playback|
-  playback.write do |length|
+unless ARGV.shift == "async"
+  Playback.open do |playback|
+    playback.write do |length|
+      $stdin.read(length)
+    end
+  end
+else
+  Playback.open.write_in_background do |length|
     $stdin.read(length)
   end
+  loop { sleep 10 }
 end

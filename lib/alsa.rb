@@ -10,6 +10,7 @@ module ALSA
 end
 
 require 'logger'
+require 'alsa/ffi_ext'
 require 'alsa/logger'
 require 'alsa/native'
 require 'alsa/pcm/native'
