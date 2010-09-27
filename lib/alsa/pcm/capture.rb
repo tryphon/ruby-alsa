@@ -18,6 +18,40 @@ module ALSA::PCM
       end
     end
 
+    def read_in_background(&block)
+      check_handle!
+
+      async_handler = FFI::MemoryPointer.new(:pointer)
+      buffer = FFI::MemoryPointer.new(:char, hw_params.buffer_size_for(buffer_frame_count))
+
+      started = false
+
+      capture_callback = Proc.new do |async_handler|
+        if started
+          read_buffer buffer, buffer_frame_count
+          yield buffer, buffer_frame_count
+        end
+      end
+
+      ALSA::try_to "add pcm handler" do
+        ALSA::Native::async_add_pcm_handler(async_handler, handle, capture_callback, nil)
+      end
+
+      ALSA::try_to "start capture" do
+        ALSA::PCM::Native::start(handle)
+      end
+
+      hole_frame_count = ALSA::try_to "read available space" do
+        ALSA::PCM::Native::avail_update(self.handle)
+      end
+      ALSA.logger.debug { "read synchronously #{hole_frame_count} frames"}
+      FFI::MemoryPointer.new(:char, hw_params.buffer_size_for(hole_frame_count)) do |hole|
+        ALSA::PCM::Native::readi self.handle, hole, hole_frame_count
+      end
+
+      started = true
+    end
+
     def read_buffer(buffer, frame_count)
       check_handle!
 
