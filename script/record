@@ -6,8 +6,15 @@ require "#{File.dirname(__FILE__)}/../lib/alsa"
 include ALSA::PCM
 ALSA.logger.level = Logger::DEBUG
 
-Capture.open do |capture|
-  capture.read do |buffer, frame_count|
+unless ARGV.shift == "async"
+  Capture.open do |capture|
+    capture.read do |buffer, frame_count|
+      $stdout.write buffer
+    end               
+  end
+else
+  Capture.open.read_in_background do |buffer, frame_count|
     $stdout.write buffer
-  end               
+  end          
+  loop { sleep 10 }
 end
