@@ -6,7 +6,7 @@ begin
 
   namespace "package" do
     Package.new(:"libalsa-ruby") do |t|
-      t.version = '0.1'
+      t.version = '0.7'
       t.debian_increment = 1
 
       t.source_provider = GitExportProvider.new
