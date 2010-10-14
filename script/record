@@ -1,5 +1,9 @@
 #!/usr/bin/env ruby
 
+# Record a raw audio content 
+#
+# script/record | sox -t raw -c 2 -r 44100 -e signed-integer -b 16 - /tmp/capture.wav
+
 require 'rubygems' unless ENV['NO_RUBYGEMS']
 require "#{File.dirname(__FILE__)}/../lib/alsa"
 
@@ -9,12 +13,12 @@ ALSA.logger.level = Logger::DEBUG
 unless ARGV.shift == "async"
   Capture.open do |capture|
     capture.read do |buffer, frame_count|
-      $stdout.write buffer
+      $stdout.write buffer.read_string(buffer.size)
     end               
   end
 else
   Capture.open.read_in_background do |buffer, frame_count|
-    $stdout.write buffer
+    $stdout.write buffer.read_string(buffer.size)
   end          
   loop { sleep 10 }
 end

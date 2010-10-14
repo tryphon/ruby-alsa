@@ -8,12 +8,11 @@ module ALSA::PCM
     def read
       check_handle!
 
-      ALSA.logger.debug { "start read with #{hw_params.sample_rate}, #{hw_params.channels} channels, #{hw_params.period_time} as period time"}
+      ALSA.logger.debug { "start read with #{hw_params.inspect}"}
 
-      ALSA.logger.debug { "allocate #{hw_params.buffer_size_for(buffer_frame_count)} bytes for #{buffer_frame_count} frames" }
       FFI::MemoryPointer.new(:char, hw_params.buffer_size_for(buffer_frame_count)) do |buffer|
         begin
-          read_buffer buffer, available_frame_count
+          read_buffer buffer, buffer_frame_count
         end while yield buffer, buffer_frame_count
       end
     end
@@ -28,8 +27,9 @@ module ALSA::PCM
 
       capture_callback = Proc.new do |async_handler|
         if started
-          read_buffer buffer, buffer_frame_count
-          yield buffer, buffer_frame_count
+          frame_to_read = buffer_frame_count
+          read_buffer buffer, frame_to_read
+          yield buffer, frame_to_read
         end
       end
 
@@ -64,6 +64,8 @@ module ALSA::PCM
           response
         end
       end
+
+      ALSA.logger.debug { "read frame count: #{read_count}/#{frame_count}"}
 
       missing_frame_count = frame_count - read_count
       if missing_frame_count > 0

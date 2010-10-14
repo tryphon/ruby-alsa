@@ -75,7 +75,9 @@ module ALSA::PCM
         :access => :rw_interleaved, 
         :channels => 2, 
         :sample_format => :s16_le, 
-        :sample_rate => 44100 
+        :sample_rate => 44100,
+        # :buffer_time => buffer_time_size * 1000,
+        # :period_time => buffer_time_size * 1000 / 4
       }.update(attributes)
 
       change_hardware_parameters do |hw_params|
