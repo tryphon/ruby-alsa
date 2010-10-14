@@ -94,6 +94,22 @@ module ALSA::PCM
       value
     end
 
+    def buffer_time=(buffer_time)
+      ALSA::try_to "set buffer time (#{buffer_time})" do
+        value = FFI::MemoryPointer.new(:int)
+        value.write_int(buffer_time)
+
+        dir = FFI::MemoryPointer.new(:int)
+        dir.write_int(-1)
+        error_code = ALSA::PCM::Native::hw_params_set_buffer_time_near self.device.handle, self.handle, value, dir
+
+        value.free
+        dir.free
+
+        error_code
+      end
+    end
+
     def sample_rate
       rate = nil
       ALSA::try_to "get sample rate" do
@@ -142,6 +158,39 @@ module ALSA::PCM
       channels
     end
 
+    def period_size
+      value = nil
+      ALSA::try_to "get period size" do
+        value_pointer = FFI::MemoryPointer.new(:int)
+        dir_pointer = FFI::MemoryPointer.new(:int)
+        dir_pointer.write_int(0)
+
+        error_code = ALSA::PCM::Native::hw_params_get_period_size self.handle, value_pointer, dir_pointer
+
+        value = value_pointer.read_int
+
+        value_pointer.free
+        dir_pointer.free
+
+        error_code
+      end
+      value
+    end
+
+    def buffer_size
+      value = nil
+      ALSA::try_to "get buffer size" do
+        value_pointer = FFI::MemoryPointer.new(:int)
+        error_code = ALSA::PCM::Native::hw_params_get_buffer_size self.handle, value_pointer
+        value = value_pointer.read_int
+
+        value_pointer.free
+
+        error_code
+      end
+      value
+    end
+
     def buffer_size_for(frame_count)
       ALSA::PCM::Native::format_size(self.sample_format, frame_count) * self.channels
     end
@@ -154,6 +203,10 @@ module ALSA::PCM
       ALSA::try_to "unallocate hw_params" do
         ALSA::PCM::Native::hw_params_free self.handle
       end
+    end
+
+    def inspect
+      "#<ALSA::PCM::HwParameters:#{object_id} sample_rate=#{sample_rate}, channels=#{channels}, period_time=#{period_time}, period_size=#{period_size}, buffer_size=#{buffer_size}>"
     end
 
   end

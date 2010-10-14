@@ -52,6 +52,9 @@ module ALSA::PCM
     attach_function :hw_params_set_periods, :snd_pcm_hw_params_set_periods, [ :pointer, :pointer, :uint, :int ], :int
     attach_function :hw_params_set_period_time_near, :snd_pcm_hw_params_set_period_time_near, [ :pointer, :pointer, :pointer, :pointer ], :int
     attach_function :hw_params_get_period_time, :snd_pcm_hw_params_get_period_time, [ :pointer, :pointer, :pointer ], :int
+    attach_function :hw_params_get_period_size, :snd_pcm_hw_params_get_period_size, [ :pointer, :pointer, :pointer ], :int
+    attach_function :hw_params_get_buffer_size, :snd_pcm_hw_params_get_buffer_size, [ :pointer, :pointer ], :int
+    attach_function :hw_params_set_buffer_time_near, :snd_pcm_hw_params_set_buffer_time_near, [ :pointer, :pointer, :pointer, :pointer ], :int
 
     attach_function :sw_params, :snd_pcm_sw_params, [:pointer, :pointer], :int
     attach_function :sw_params_malloc, :snd_pcm_sw_params_malloc, [:pointer], :int
@@ -64,6 +67,6 @@ module ALSA::PCM
     attach_function :bytes_to_frames, :snd_pcm_bytes_to_frames, [ :pointer, :int ], :int
 
     attach_function :start, :snd_pcm_start, [ :pointer ], :int
-
+    
   end
 end
