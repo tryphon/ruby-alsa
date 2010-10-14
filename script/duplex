@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+
+require 'rubygems' unless ENV['NO_RUBYGEMS']
+require "#{File.dirname(__FILE__)}/../lib/alsa"
+
+include ALSA::PCM
+ALSA.logger.level = Logger::DEBUG
+
+if ARGV.shift == "async"
+  Capture.open.read_in_background do |buffer, frame_count|
+    $stdout.write buffer
+  end          
+  
+  Playback.open.write_in_background do |length|
+    $stdin.read(length)
+  end
+
+  loop { sleep 10 }
+else
+  Thread.start {
+    Capture.open do |capture|
+      capture.read do |buffer, frame_count|
+        $stdout.write buffer
+      end               
+    end
+  }
+
+  Playback.open do |playback|
+    playback.write do |length|
+      $stdin.read(length)
+    end
+  end
+end
+
+
