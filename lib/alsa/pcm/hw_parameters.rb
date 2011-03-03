@@ -75,6 +75,25 @@ module ALSA::PCM
       end
     end
 
+    def buffer_time_max
+      value = nil
+      ALSA::try_to "get buffer time max" do
+        value_pointer = FFI::MemoryPointer.new(:int)
+        dir_pointer = FFI::MemoryPointer.new(:int)
+        dir_pointer.write_int(0)
+
+        error_code = ALSA::PCM::Native::hw_params_get_buffer_time_max self.handle, value_pointer, dir_pointer
+
+        value = value_pointer.read_int
+
+        value_pointer.free
+        dir_pointer.free
+
+        error_code
+      end
+      value
+    end
+
     def period_time
       value = nil
       ALSA::try_to "get period time" do

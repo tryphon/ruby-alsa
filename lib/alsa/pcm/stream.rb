@@ -27,7 +27,7 @@ module ALSA::PCM
       self.hardware_parameters = hardware_attributes
 
       change_software_parameters do |sw_params|
-        sw_params.available_minimum = buffer_frame_count / 2
+        sw_params.available_minimum = buffer_frame_count / 4
       end
 
       ALSA::PCM::Native.prepare(handle)
@@ -56,6 +56,7 @@ module ALSA::PCM
 
       begin
         yield hw_params
+        hw_params.update_attributes :buffer_time => hw_params.buffer_time_max
 
         ALSA::try_to "set hw parameters" do
           ALSA::PCM::Native::hw_params self.handle, hw_params.handle

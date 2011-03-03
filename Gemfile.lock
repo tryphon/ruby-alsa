@@ -29,7 +29,6 @@ PLATFORMS
 
 DEPENDENCIES
   autotest
-  ffi (>= 0.6.3)
   rake
   rcov
   rspec
