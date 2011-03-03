@@ -1,23 +1,18 @@
+PATH
+  remote: .
+  specs:
+    ruby-alsa (0.0.7)
+      ffi (>= 0.6.3)
+
 GEM
   remote: http://rubygems.org/
   specs:
-    RedCloth (4.2.7)
     ZenTest (4.5.0)
-    activesupport (2.3.11)
     autotest (4.4.6)
       ZenTest (>= 4.4.1)
     diff-lcs (1.1.2)
     ffi (1.0.6)
       rake (>= 0.8.7)
-    hoe (2.8.0)
-      rake (>= 0.8.7)
-    i18n (0.5.0)
-    newgem (1.5.3)
-      RedCloth (>= 4.1.1)
-      activesupport (~> 2.3.4)
-      hoe (>= 2.4.0)
-      rubigen (>= 1.5.3)
-      syntax (>= 1.0.0)
     rake (0.8.7)
     rcov (0.9.9)
     rspec (2.5.0)
@@ -28,18 +23,14 @@ GEM
     rspec-expectations (2.5.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.5.0)
-    rubigen (1.5.6)
-      activesupport (>= 2.3.5)
-      i18n
-    syntax (1.0.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   autotest
-  ffi
-  hoe (< 2.9)
-  newgem
+  ffi (>= 0.6.3)
+  rake
   rcov
   rspec
+  ruby-alsa!
