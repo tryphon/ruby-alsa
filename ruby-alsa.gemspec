@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "autotest"
   s.add_development_dependency "rcov"
   s.add_development_dependency "rake"
+  s.add_development_dependency "rake-debian-build"
 
   s.add_runtime_dependency(%q<ffi>, [">= 0.6.3"])
 end

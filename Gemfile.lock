@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ruby-alsa (0.0.7)
+    ruby-alsa (0.8)
       ffi (>= 0.6.3)
 
 GEM
@@ -14,6 +14,7 @@ GEM
     ffi (1.0.6)
       rake (>= 0.8.7)
     rake (0.8.7)
+    rake-debian-build (1.0.16)
     rcov (0.9.9)
     rspec (2.5.0)
       rspec-core (~> 2.5.0)
@@ -29,7 +30,9 @@ PLATFORMS
 
 DEPENDENCIES
   autotest
+  ffi (>= 0.6.3)
   rake
+  rake-debian-build
   rcov
   rspec
   ruby-alsa!
