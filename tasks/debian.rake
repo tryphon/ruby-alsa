@@ -15,6 +15,7 @@ namespace :package do
   end
 
   class DebianPackage
+    include FileUtils
 
     def attributes
       @attributes ||= Hash[`dpkg-parsechangelog --count 1`.scan(/^([^:]+): (.*)$/)]
@@ -36,12 +37,12 @@ namespace :package do
 
       FileUtils.mkdir_p source_directory
       export_source source_directory
-      
-      Dir.chdir(source_directory) do 
+
+      Dir.chdir(source_directory) do
         sh "dpkg-buildpackage -S"
       end
     end
-      
+
     def changes_file
       @changes_file ||= "build/#{attributes['Source']}_#{attributes['Version']}_source.changes"
     end

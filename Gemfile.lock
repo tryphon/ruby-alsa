@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     ruby-alsa (0.8)
-      ffi (>= 0.6.3)
+      ffi (>= 1.2.0)
 
 GEM
   remote: https://rubygems.org/
